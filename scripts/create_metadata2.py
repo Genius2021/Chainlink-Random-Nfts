@@ -7,11 +7,11 @@ from metadata import sample_metadata
 from scripts.helpful_scripts import get_breed_name
 from pathlib import Path
 from dotenv import load_dotenv
-from scripts.dog_tokenURI_dict import tokenURI_mappings
-from scripts.dog_imageURI_dict import imageURI_mappings
-from scripts.upload_to_pinata import pinata_upload
+from scripts.upload_to_pinata import pinata_image_upload, pinata_json_upload
 
 load_dotenv()
+
+#Basically, this file looks into the img folder, then create a token uri and save them.
 
 def main():
     print("Working on " + network.show_active())
@@ -23,8 +23,7 @@ def main():
     )
     write_metadata(number_of_collectibles)
 
-def write_metadata(token_id, folder_name="PUG"):
-    # image_folder = "./img"
+def write_metadata(token_id, folder_name="ST_BERNARD"):
     # for folder_name in os.listdir(image_folder):
         breed_folder_location = f"./img/{folder_name}"
         for file_name in os.listdir(breed_folder_location):
@@ -52,18 +51,22 @@ def write_metadata(token_id, folder_name="PUG"):
                 if os.getenv("UPLOAD_TO_IPFS") == "true":
                     lowercase_name = name.lower().replace('_', '-')
                     image_path = f"./img/{folder_name}/{lowercase_name}.png"
-                    image_to_upload = upload_to_ipfs(image_path, lowercase_name, folder_name)
-                image_to_upload = (
-                    imageURI_mappings[folder_name] if not image_to_upload else image_to_upload
-                )
+                    image_to_upload = upload_to_ipfs(image_path, file_name, folder_name)
+                # image_to_upload = (
+                #     imageURI_mappings[folder_name] if not image_to_upload else image_to_upload
+                # )
                 collectible_metadata["image"] = image_to_upload
-                if os.getenv("UPLOAD_TO_PINATA") == "true":
-                    pinata_upload(image_path)
                 with open(metadata_file_name, "w") as file:
                     json.dump(collectible_metadata, file)
                 if os.getenv("UPLOAD_TO_IPFS") == "true":
-                    upload_to_ipfs(metadata_file_name, lowercase_name, folder_name)
-                    print("Metadata uploaded successfully!")
+                    name_extension = metadata_file_name.lower().split("/")[-1]
+                    upload_to_ipfs(metadata_file_name, name_extension, folder_name)
+                    print("Metadata uploaded to ipfs successfully!")
+                if os.getenv("UPLOAD_TO_PINATA") == "true":
+                    print("Pinning to Pinata")
+                    pinata_image_upload(image_path)
+                    pinata_json_upload(metadata_file_name, collectible_metadata)
+                    print("All have been pinned to Pinata!")
 
 
 def upload_to_ipfs(filepath, file_name, folder_name):
@@ -77,7 +80,6 @@ def upload_to_ipfs(filepath, file_name, folder_name):
         response = requests.post(ipfs_url + "/api/v0/add",
                                  files={"file": image_binary})
         ipfs_hash = response.json()["Hash"]
-        # file_name = filepath.split("/")[-1]
         file_uri = f"ipfs://{ipfs_hash}?filename={file_name}"
         file_extension = file_name.split(".")[-1]
         save_URI(folder_name, file_uri, file_extension)
@@ -85,13 +87,22 @@ def upload_to_ipfs(filepath, file_name, folder_name):
     return file_uri
 
 
-def save_URI(name, uri, extension):
+def save_URI(folder_name, uri, extension):
     if(extension == "json"):
-        uriArray = tokenURI_mappings[name]
-        uriArray.append(uri)
+        with open("scripts/tokenURI_dict.json", "r+") as file:
+            data = json.load(file)
+            data[folder_name].append(uri)
+            file.seek(0)
+            json.dump(data, file)
     else:
-        uriArray = imageURI_mappings[name]
-        uriArray.append(uri)
+        with open("scripts/imageURI_dict.json", "r+") as file:
+            data = json.load(file)
+            data[folder_name].append(uri)
+            file.seek(0)
+            json.dump(data, file) 
+        
+
+
 
 
 

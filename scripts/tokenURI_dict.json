@@ -1,0 +1,19 @@
+{
+  "PUG": [
+    "ipfs://Qmd9MCGtdVz2miNumBHDbvj8bigSgTwnr4SbyH6DNnpWdt?filename=0-PUG.json",
+    "ipfs://QmSYvaMTF93coQHayoDJ3DbJYumpCHWGgM3YwKCB7nQW8V?filename=1-pug.json",
+    "ipfs://QmSYvaMTF93coQHayoDJ3DbJYumpCHWGgM3YwKCB7nQW8V?filename=2-pug.json"
+  ],
+  "SHIBA_INU": [
+    "ipfs://QmdryoExpgEQQQgJPoruwGJyZmz6SqV4FRTX1i73CT3iXn?filename=3-SHIBA_INU.json",
+    "ipfs://QmTaX671LM8b61ebyXT8RdYj9w5tCjkXNEkofDxkXKEexL?filename=4-shiba_inu.json",
+    "ipfs://QmTaX671LM8b61ebyXT8RdYj9w5tCjkXNEkofDxkXKEexL?filename=5-shiba_inu.json",
+    "ipfs://QmTaX671LM8b61ebyXT8RdYj9w5tCjkXNEkofDxkXKEexL?filename=6-shiba_inu.json",
+    "ipfs://QmTaX671LM8b61ebyXT8RdYj9w5tCjkXNEkofDxkXKEexL?filename=7-shiba_inu.json",
+    "ipfs://QmTaX671LM8b61ebyXT8RdYj9w5tCjkXNEkofDxkXKEexL?filename=8-shiba_inu.json"
+  ],
+  "ST_BERNARD": [
+    "ipfs://QmbBnUjyHHN7Ytq9xDsYF9sucZdDJLRkWz7vnZfrjMXMxs?filename=9-ST_BERNARD.json",
+    "ipfs://QmY7SUTrEXtpnAQmo6dYocDoJuJcZf3fMxwbVtgabyDqmt?filename=10-st_bernard.json"
+  ]
+}
